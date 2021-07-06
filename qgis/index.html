@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/HIV_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>,&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        basemap0.addTo(map);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        var overlay_GoogleRoad_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            opacity: 1.0
+        });
+        overlay_GoogleRoad_0.addTo(map);
+        map.addLayer(overlay_GoogleRoad_0);
+        function pop_HIV_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">ID_Kec</th>\
+                        <td>' + (feature.properties['ID_Kec'] !== null ? Autolinker.link(String(feature.properties['ID_Kec'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nm_Kec</th>\
+                        <td>' + (feature.properties['Nm_Kec'] !== null ? Autolinker.link(String(feature.properties['Nm_Kec'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RS/Psksms</th>\
+                        <td>' + (feature.properties['RS/Psksms'] !== null ? Autolinker.link(String(feature.properties['RS/Psksms'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Muntaber</th>\
+                        <td>' + (feature.properties['Muntaber'] !== null ? Autolinker.link(String(feature.properties['Muntaber'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DB</th>\
+                        <td>' + (feature.properties['DB'] !== null ? Autolinker.link(String(feature.properties['DB'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">IS Prnfsan</th>\
+                        <td>' + (feature.properties['IS Prnfsan'] !== null ? Autolinker.link(String(feature.properties['IS Prnfsan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campak</th>\
+                        <td>' + (feature.properties['Campak'] !== null ? Autolinker.link(String(feature.properties['Campak'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Malaria</th>\
+                        <td>' + (feature.properties['Malaria'] !== null ? Autolinker.link(String(feature.properties['Malaria'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">HIV/AIDS</th>\
+                        <td>' + (feature.properties['HIV/AIDS'] !== null ? Autolinker.link(String(feature.properties['HIV/AIDS'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_HIV_1_0(feature) {
+            switch(String(feature.properties['Nm_Kec'])) {
+                case 'Batangan':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '1,5',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(41,4,249,1.0)',
+            }
+                    break;
+                case 'Cluwak':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,245,224,1.0)',
+            }
+                    break;
+                case 'Dukuhseti':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,241,216,1.0)',
+            }
+                    break;
+                case 'Gabus':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,237,207,1.0)',
+            }
+                    break;
+                case 'Gembong':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,233,199,1.0)',
+            }
+                    break;
+                case 'Gunung Wungkal':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(189,229,190,1.0)',
+            }
+                    break;
+                case 'JAKEN':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(177,225,189,1.0)',
+            }
+                    break;
+                case 'Jakenan':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(165,220,191,1.0)',
+            }
+                    break;
+                case 'Juwana':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(153,216,192,1.0)',
+            }
+                    break;
+                case 'Kayen':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(141,211,194,1.0)',
+            }
+                    break;
+                case 'Margorejo':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,207,196,1.0)',
+            }
+                    break;
+                case 'Margoyoso':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(118,200,197,1.0)',
+            }
+                    break;
+                case 'Pati':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(107,192,198,1.0)',
+            }
+                    break;
+                case 'Puncakwangi':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(96,184,199,1.0)',
+            }
+                    break;
+                case 'Sukolilo':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(86,176,200,1.0)',
+            }
+                    break;
+                case 'Tambakromo':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(75,168,201,1.0)',
+            }
+                    break;
+                case 'Tayu':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(64,159,201,1.0)',
+            }
+                    break;
+                case 'Tlogowungu':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(53,148,195,1.0)',
+            }
+                    break;
+                case 'Trangkil':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(41,137,189,1.0)',
+            }
+                    break;
+                case 'Wedarijaksa':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(30,126,184,1.0)',
+            }
+                    break;
+                case 'Winong':
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,115,178,1.0)',
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_HIV_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,104,172,1.0)',
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_HIV_1');
+        map.getPane('pane_HIV_1').style.zIndex = 401;
+        map.getPane('pane_HIV_1').style['mix-blend-mode'] = 'normal';
+        var layer_HIV_1 = new L.geoJson(json_HIV_1, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_HIV_1',
+            onEachFeature: pop_HIV_1,
+            style: style_HIV_1_0,
+        });
+        bounds_group.addLayer(layer_HIV_1);
+        map.addLayer(layer_HIV_1);
+        setBounds();
+        var i = 0;
+        layer_HIV_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Nm_Kec'] !== null?String('<div style="color: #000000; font-size: 8pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['Nm_Kec']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_HIV_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_HIV_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_HIV_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_HIV_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_HIV_1]);
+        });
+        </script>
+    </body>
+</html>
